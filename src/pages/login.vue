@@ -25,12 +25,13 @@
         </button>
       </div>
     </div>
-  </template>
+</template>
   
-  <script setup lang="ts">
+<script setup lang="ts">
   import { ref } from "vue";
   import { useRouter } from "vue-router";
   import { useAuthStore } from "@/stores/auth";
+  import axios from "axios";
   
   const auth = useAuthStore();
   const username = ref("");
@@ -42,13 +43,21 @@
     return username.value.trim() !== "" && password.value.trim() !== "";
   };
   
-  const onLogin = () => {
-    if (isFormValid()) {
-      auth.login(username.value); // You may adjust this part according to your authentication logic
-      router.push("/");
-    } else {
-      // Handle invalid login attempt, e.g., show an error message
-      alert("Please enter username and password");
-    }
+  const onLogin = async () => {
+    const respond =  await axios.post('http://localhost:3000/login', {
+        username: username.value,
+        password: password.value
+    });
+
+    console.log(respond)
+
+
+    // if (isFormValid()) {
+    //   auth.login(username.value); // You may adjust this part according to your authentication logic
+    //   router.push("/");
+    // } else {
+    //   // Handle invalid login attempt, e.g., show an error message
+    //   alert("Please enter username and password");
+    // }
   };
-  </script>
+</script>
